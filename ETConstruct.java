@@ -18,7 +18,7 @@ public class ETConstruct {
 	//zy: add the order_index
 	public ExpressionTree select(){
 		//node of "cross"
-		ExpressionTree dull = new ExpressionTree("Hi");
+		ExpressionTree pi = new ExpressionTree("null");
 		List<ExpressionTree> tables_for_cross = new ArrayList<ExpressionTree>();
 		// get the number of children for "table_list"
 		int count = parsetree.getChildren().get(1).getChildren().size();
@@ -46,7 +46,7 @@ public class ETConstruct {
 			}
 			List<ExpressionTree> list1 = new ArrayList<ExpressionTree>();
 		    list1.add(sigma);
-			ExpressionTree pi = new ExpressionTree("pi",list1,names_for_select);
+			pi = new ExpressionTree("pi",list1,names_for_select);
 			System.out.println("*****");
 		}
 		else{
@@ -60,12 +60,10 @@ public class ETConstruct {
 			}
 			List<ExpressionTree> list1 = new ArrayList<ExpressionTree>();
 		    list1.add(cross);
-			ExpressionTree pi = new ExpressionTree("pi",list1,names_for_select);
+			pi = new ExpressionTree("pi",list1,names_for_select);
 			System.out.println("&&&&&");
-		}
-		
-		
-		return dull;
+		}		
+		return pi;
 	}
 	
 }

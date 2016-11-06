@@ -9,7 +9,7 @@ public class ExpressionTree implements Iterable<ExpressionTree> {
     /** The children of this parse tree node, in the order in which they appear */
     public final List<ExpressionTree> children;
     
-    public final List<String> subscript;
+    public final List<ParseTree> attribute;
 
     /**
      * Constructs a new parse tree wrapping the given symbol with the given
@@ -18,13 +18,13 @@ public class ExpressionTree implements Iterable<ExpressionTree> {
      * @param symbol The symbol at this parse tree node.
      * @param children The children of this parse tree node.
      */
-    public ExpressionTree(String symbol, List<ExpressionTree> children, ArrayList<String> subscript) {
-        if (symbol == null || children == null || subscript == null)
+    public ExpressionTree(String symbol, List<ExpressionTree> children, List<ParseTree> attribute) {
+        if (symbol == null || children == null )
             throw new NullPointerException();
 
         this.symbol = symbol;
         this.children = children;
-        this.subscript = subscript;
+        this.attribute = attribute;
     }
 
     /**
@@ -34,7 +34,7 @@ public class ExpressionTree implements Iterable<ExpressionTree> {
      * @param symbol The symbol held by this parse tree node.
      */
     public ExpressionTree(String symbol) {
-        this(symbol, new ArrayList<ExpressionTree>(), new ArrayList<String>());
+        this(symbol, new ArrayList<ExpressionTree>(), new ArrayList<ParseTree>());
     }
 
     /**
@@ -55,8 +55,8 @@ public class ExpressionTree implements Iterable<ExpressionTree> {
         return children;
     }
     
-    public List<String> getSubscript() {
-        return subscript;
+    public List<ParseTree> getAttribute() {
+        return attribute;
     }
 
     /**

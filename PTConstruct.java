@@ -63,50 +63,62 @@ public class PTConstruct {
 		ParseTree table_list = new ParseTree("table_list", tables);
 		
 		//construct conditions list
-		List<ParseTree> conditions = new ArrayList<ParseTree>();				
-		List valid1 = Arrays.asList("AND","OR");		
-		// index for the condition loop
-		int searchindex = 0;
-		if (order_index == 0){
-			searchindex = this.statement.size();
-		}
-		else{
-			searchindex = order_index;
-		}		
-		// zy: indicate the index of the last "AND", "OR"
-		int last =  where_index ; 		
-		// zy: when meet "AND" "OR" extract concessitive 3 elements as a tree of subcondition, "AND""OR" goes to condition tree
-		for(int i = where_index + 1; i < searchindex; i++){
-			if(valid1.contains(this.statement.get(i))){
-				List<ParseTree> subcondition = new ArrayList<ParseTree>(); 
-				for (int j = last+1; j < i; j++ ){					
-					subcondition.add(new ParseTree(this.statement.get(j)));
-					System.out.println("subcondtion:"+ this.statement.get(j));				
-				}
-				last = i;
-				ParseTree subcondition_list = new ParseTree("subcondition_list", subcondition);
-				conditions.add(subcondition_list);
-				conditions.add(new ParseTree(this.statement.get(i)));							
+		ParseTree condition_list = new ParseTree("null");
+		if ( where_index != 0){
+			List<ParseTree> conditions = new ArrayList<ParseTree>();				
+			List valid1 = Arrays.asList("AND","OR");		
+			// index for the condition loop
+			int searchindex = 0;
+			if (order_index == 0){
+				searchindex = this.statement.size();
 			}
-		}	
-		// add the last subcondition after the last AND OR
-		List<ParseTree> subcondition = new ArrayList<ParseTree>(); 
-		for (int k = last+1; k< searchindex-1; k++){
-			subcondition.add(new ParseTree(this.statement.get(k)));
-			System.out.println("subcondtion:"+ this.statement.get(k));		
+			else{
+				searchindex = order_index;
+			}		
+			// zy: indicate the index of the last "AND", "OR"
+			int last =  where_index ; 		
+			// zy: when meet "AND" "OR" extract concessitive 3 elements as a tree of subcondition, "AND""OR" goes to condition tree
+			for(int i = where_index + 1; i < searchindex; i++){
+				if(valid1.contains(this.statement.get(i))){
+					List<ParseTree> subcondition = new ArrayList<ParseTree>(); 
+					for (int j = last+1; j < i; j++ ){					
+						subcondition.add(new ParseTree(this.statement.get(j)));
+						System.out.println("subcondtion:"+ this.statement.get(j));				
+					}
+					last = i;
+					ParseTree subcondition_list = new ParseTree("subcondition_list", subcondition);
+					conditions.add(subcondition_list);
+					conditions.add(new ParseTree(this.statement.get(i)));							
+				}
+			}	
+			// add the last subcondition after the last AND OR
+			List<ParseTree> subcondition = new ArrayList<ParseTree>(); 
+			for (int k = last+1; k< searchindex-1; k++){
+				subcondition.add(new ParseTree(this.statement.get(k)));
+				System.out.println("subcondtion:"+ this.statement.get(k));		
+			}
+			ParseTree subcondition_list = new ParseTree("subcondition_list", subcondition);
+			conditions.add(subcondition_list);
+			
+			// construct condition_list ParseTree, if 5 children, then 2 AND OR, 2 subcondition
+			condition_list = new ParseTree("condition_list", conditions);
 		}
-		ParseTree subcondition_list = new ParseTree("subcondition_list", subcondition);
-		conditions.add(subcondition_list);
 		
-		// construct condition_list ParseTree, if 5 children, then 2 AND OR, 2 subcondition
-		ParseTree condition_list = new ParseTree("condition_list", conditions);
 		
 		//construct whole ParseTree
 		List<ParseTree> root_list = new ArrayList<ParseTree>();
-		root_list.add(attri_list);
-		root_list.add(table_list);
-		root_list.add(condition_list);
-		ParseTree root = new ParseTree("select", root_list);
+		ParseTree root = new ParseTree("null");
+		if (where_index !=0){
+			root_list.add(attri_list);
+			root_list.add(table_list);
+			root_list.add(condition_list);
+            root = new ParseTree("select", root_list);
+		}
+		else{
+			root_list.add(attri_list);
+			root_list.add(table_list);
+			root = new ParseTree("select", root_list);
+		}
 		return root;
 	}
 }
