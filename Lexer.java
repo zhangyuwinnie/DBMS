@@ -95,7 +95,11 @@ public class Lexer {
 		    PTConstruct con = new PTConstruct(mylist);
 		    ParseTree t;
 		    t = con.construct();
-		    System.out.println("stop");
+		    System.out.println("stop1");
+		    ETConstruct et = new ETConstruct(t);
+		    ExpressionTree e;
+		    e = et.construct();
+		    System.out.println("stop2");
 
 		    
 		  }
