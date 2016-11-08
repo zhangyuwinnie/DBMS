@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 public class Lexer {
   public static enum TokenType {
     // Token types cannot have underscores
-    NUMBER("-?[0-9]+"), WHITESPACE("[ \t\f\r\n]+"), ATTRIBUTENAME("[a-z][0-9a-z]*\\.[a-z][0-9a-z]*"), NAME("[a-z][0-9a-z]*"),RESERVED("[A-Z]+"), BINARYOP("[*|/|+|-|,|.|;|(|)|[|]|<|>|=|\"]");
+    NUMBER("-?[0-9]+"), QUOTE("\\\"(.*)\\\""), WHITESPACE("[ \t\f\r\n]+"), ATTRIBUTENAME("[a-z][0-9a-z]*\\.[a-z][0-9a-z]*"), NAME("[a-z][0-9a-z]*"),RESERVED("[A-Z]+"), BINARYOP("[*|/|+|-|,|.|;|(|)|[|]|<|>|=|\"]");
 
     public final String pattern;
 
@@ -46,6 +46,10 @@ public class Lexer {
         tokens.add(new Token(TokenType.NUMBER, matcher.group(TokenType.NUMBER.name())));
         continue;
       } 
+      else if (matcher.group(TokenType.QUOTE.name()) != null) {
+          tokens.add(new Token(TokenType.QUOTE, matcher.group(TokenType.QUOTE.name())));
+          continue;
+      }
       else if (matcher.group(TokenType.ATTRIBUTENAME.name()) != null) {
           tokens.add(new Token(TokenType.ATTRIBUTENAME, matcher.group(TokenType.ATTRIBUTENAME.name())));
           continue;
@@ -82,8 +86,9 @@ public class Lexer {
   
 
 		public static void main(String[] args) {
-		    //String input = "SELECT * FROM course WHERE grade = \"C\" AND [ exam > 70 OR project > 70 ] AND NOT ( exam * 30 + homework * 20 + project * 50 ) / 100 < 60";
-			String select_statement = "SELECT (zy, ww) FROM course, course2 ;";
+		    String select_statement = "SELECT * FROM course WHERE grade = \"C D\" AND ( exam > 70 OR project > 70 ) AND NOT ( exam * 30 + homework * 20 + project * 50 ) / 100 < 60";
+			//String select_statement = "SELECT (zy, ww) FROM course, course2 ;";
+			//String select_statement = "SELECT wyh,atm FROM c, course2 WHERE course.sid = course2.sid AND course.exam > course2.exam;";
 		    // Create tokens and print them
 		    //ArrayList<Token> tokens = lex(input);
 			ArrayList<Token> tokens = lex(select_statement);
